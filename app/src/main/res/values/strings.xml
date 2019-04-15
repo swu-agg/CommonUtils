@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Common</string>
+    <string name="study">学习Android</string>
+    <string name="study_not">----------学习不好要挨板子哦~</string>
+</resources>
