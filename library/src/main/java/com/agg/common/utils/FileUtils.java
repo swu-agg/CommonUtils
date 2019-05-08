@@ -25,11 +25,16 @@ public class FileUtils {
         return file == null ? null : getFileExtension(file.getPath());
     }
 
+    /**
+     * 获取扩展名
+     * @param filePath 文件路径
+     * @return 扩展名
+     */
     public static String getFileExtension(String filePath) {
         if (TextUtils.isEmpty(filePath)) {
             return filePath;
         } else {
-            int lastPoi = filePath.lastIndexOf(46);
+            int lastPoi = filePath.lastIndexOf(46); // 46 -> .
             int lastSep = filePath.lastIndexOf(File.separator);
             return lastPoi != -1 && lastSep < lastPoi ? filePath.substring(lastPoi + 1) : "";
         }
