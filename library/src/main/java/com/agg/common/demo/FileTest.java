@@ -16,8 +16,7 @@ import java.util.Date;
 public class FileTest {
 
     public static void main(String[] args){
-        System.out.println((char)46);
-        transTime(1548237106000L);
+        transTime(1540192619000L);
     }
 
     private static void transTime(long time) {
