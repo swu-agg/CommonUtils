@@ -9,16 +9,27 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.Subject;
 
+/**
+ * <pre>
+ *     author    : Agg
+ *     blog      : https://blog.csdn.net/Agg_bin
+ *     time      : 2019/06/18
+ *     desc      : Rx相关工具类
+ *     reference :
+ *     remark    :
+ * </pre>
+ */
 public class RxUtils {
 
 
     /**
      * 倒计时，倒计 time 秒
-     * @param time  单位：秒
-     * @return  Observable
+     *
+     * @param time 单位：秒
+     * @return Observable
      */
     public static Observable<Integer> countDown(int time) {
-        time = time<0 ? 0 : time;
+        time = time < 0 ? 0 : time;
         final int countTime = time;
         return Subject.interval(0, 1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
@@ -28,36 +39,57 @@ public class RxUtils {
 
     /**
      * 过滤点击时间，在特定的时间内
-     *  只取最第一次点击
-     *  注意结合RxLife释放引用
-     * @param view  view
-     * @param durationMs  时间毫秒
-     * @return  Observable<Object>，Object并无意义
+     * 只取最第一次点击
+     * 注意结合RxLife释放引用
+     *
+     * @param view       view
+     * @param durationMs 时间毫秒
+     * @return Observable<Object>，Object并无意义
      */
     public static Observable<Object> filterClick(View view, long durationMs) {
         return Observable.create(subscriber -> {
-            if (view!=null)
+            if (view != null)
                 view.setOnClickListener(v -> subscriber.onNext(1));
-        }).throttleFirst(durationMs,TimeUnit.MILLISECONDS);
+        }).throttleFirst(durationMs, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * 过滤点击时间，在特定的时间内
+     * 只取最第一次点击
+     * 注意结合RxLife释放引用
+     *
+     * @param view       view
+     * @param durationMs 时间毫秒
+     * @return Observable<Integer>，Integer是view的id
+     */
+    public static Observable<Integer> filterClickView(View view, long durationMs) {
+        return Observable.create((ObservableOnSubscribe<Integer>) emitter -> {
+            if (view != null)
+                view.setOnClickListener(v -> emitter.onNext(v.getId()));
+        }).throttleFirst(durationMs, TimeUnit.MILLISECONDS);
     }
 
     public static Observable<Object> filterClick(View view) {
-        return filterClick(view,500);
+        return filterClick(view, 500);
+    }
+
+    public static Observable<Integer> filterClickView(View view) {
+        return filterClickView(view, 500);
     }
 
     /**
      * 统计一段时间内，View的点击次数
      *
-     * @param view  view
-     * @param durationMs    时间为 毫秒
-     * @return  Observable<Integer> 次数
+     * @param view       view
+     * @param durationMs 时间为 毫秒
+     * @return Observable<Integer> 次数
      */
     public static Observable<Integer> countClickNum(View view, long durationMs) {
         int[] count = {0};
         return Observable.create((ObservableOnSubscribe<Integer>)
                 subscriber -> {
-                    long[] time = {0,0};
-                    if (view!=null)
+                    long[] time = {0, 0};
+                    if (view != null)
                         view.setOnClickListener(v -> {
                             time[0] = System.currentTimeMillis();
                             if (time[0] - time[1] <= durationMs) {
