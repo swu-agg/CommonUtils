@@ -45,7 +45,7 @@ package com.agg.common.template;
 //        return instance;
 //    }
 //
-////    // 对变量加锁
+////    // 对对象加锁，和对方法加锁一个效果，是走向懒汉式3的一个中间过程
 ////    public static Singleton getInstance() {
 ////        synchronized (Singleton.class) {
 ////            if (instance == null) {
@@ -56,29 +56,29 @@ package com.agg.common.template;
 ////    }
 //}
 
-/**
- * 懒汉式3：改进懒汉式2，double-checked lock(DCL)双重校验锁方式。
- * 并不是每次进入getInstance方法都要获得锁。对instance访问分为两类：读和写。仅当instance为null的时候才会写，此时获得锁；其他情况就只是读操作，此时不需要获得锁了。
- *
- * DCL的好处：第一次创建实例的时候会同步所有线程，以后有线程再想获取Singleton的实例就不需要进行同步，直接返回实例即可。
- * 小插曲之JDK1.5之前DCL的小缺点：JDK1.5之前的Java中无法安全使用DCL来实现单例模式，尽管得到了Singleton的正确引用，
- * 但是却有可能访问到其成员变量的不正确值，因为volatile屏蔽指令重排序的语义在JDK1.5中才被完全修复。
- * 可参见java的“happen-before”八大原则规则的第三条，volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作。
- */
-public class Singleton{
-    private volatile static Singleton instance;
-    private Singleton() {}
-    public static Singleton getInstance() {
-        if (instance == null) {
-            synchronized (Singleton.class) {
-                if (instance == null) {
-                    instance = new Singleton();
-                }
-            }
-        }
-        return instance;
-    }
-}
+///**
+// * 懒汉式3：改进懒汉式2，Double-Checked Locking(DCL)双重校验锁方式。
+// * 并不是每次进入getInstance方法都要获得锁。对instance访问分为两类：读和写。仅当instance为null的时候才会写，此时获得锁；其他情况就只是读操作，此时不需要获得锁了。
+// *
+// * DCL的好处：第一次创建实例的时候会同步所有线程，以后有线程再想获取Singleton的实例就不需要进行同步，直接返回实例即可。
+// * 小插曲之JDK1.5之前DCL的小缺点：JDK1.5之前的Java中无法安全使用DCL来实现单例模式，尽管得到了Singleton的正确引用，
+// * 但是却有可能访问到其成员变量的不正确值，因为volatile屏蔽指令重排序的语义在JDK1.5中才被完全修复。
+// * 可参见java的“happen-before”八大原则规则的第三条，volatile变量规则：对一个变量的写操作先行发生于后面对这个变量的读操作。
+// */
+//public class Singleton{
+//    private volatile static Singleton instance;
+//    private Singleton() {}
+//    public static Singleton getInstance() {
+//        if (instance == null) {
+//            synchronized (Singleton.class) {
+//                if (instance == null) {
+//                    instance = new Singleton();
+//                }
+//            }
+//        }
+//        return instance;
+//    }
+//}
 
 ///**
 // * 静态内部类单例模式
@@ -107,9 +107,14 @@ public class Singleton{
 
 ///**
 // * 枚举
+// * 访问方式：SingletonEnum.instance.method();
+// * 借助JDK1.5中添加的枚举来实现单例模式。不仅能避免多线程同步问题，而且还能防止反序列化重新创建新的对象。
 // */
-//public enum Singleton {
-//    INSTANCE;
+//public enum SingletonEnum {
+//    instance;
+//    private SingletonEnum() {}
+//    public void method(){
+//    }
 //}
 
 
