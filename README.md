@@ -3,41 +3,16 @@
 
 initial code 
 
-
-// 单例模式 public class Singleton { // 懒汉式双重检查锁方式: private static volatile Singleton singleton = null;
-
-private Singleton() {
-}
-
-public static Singleton getSingleton() {
-    if (singleton == null) {
-        synchronized (Singleton.class) {
-            if (singleton == null) {
-                singleton = new Singleton();
-            }
-        }
-    }
-    return singleton;
-}
-}
-
 /**
-
-create by agg
-2019/02/15 */
-public class NetworkConnectedUtils {
-
-public static boolean notNetworkConnected(Context context) {
-    if (context != null) {
-        ConnectivityManager mConnectivityManager = (ConnectivityManager) context
-                .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (mConnectivityManager != null) {
-            NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (mNetworkInfo != null) {
-                return !(mNetworkInfo.isAvailable() && mNetworkInfo.isConnected());
-            }
-        }
-    }
-    return true;
-}
-}
+ * 为什么使用单例？
+ * 一个类专门提供一些公共功能供别人调用，而本身并不会处理业务逻辑。那么创建多个实例，会消耗内存，造成不必要的开销。此时需要单例。
+ * 单例是什么？
+ * 让整个生命周期内只有一个实例。
+ * <p>
+ * 一般单例模式有如下五种写法：懒汉式，双重校验锁，静态内部类，饿汉式和枚举。
+ * 懒汉式：非线程安全
+ * 双重校验锁：线程安全
+ * 静态内部类：线程安全
+ * 饿汉式：线程安全
+ * 枚举：线程安全
+ */
